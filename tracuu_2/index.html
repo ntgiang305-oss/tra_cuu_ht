@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{
+      font-family: Arial;
+      background:#f5f5f5;
+      margin:0;
+      padding:20px;
+    }
+    .box{
+      max-width:500px;
+      margin:auto;
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 2px 10px rgba(0,0,0,.1);
+    }
+    h1{
+      text-align:center;
+      color:#ee4d2d;
+      margin-top:0;
+    }
+    input{
+      width:100%;
+      padding:12px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      font-size:16px;
+      box-sizing:border-box;
+    }
+    button{
+      width:100%;
+      margin-top:10px;
+      padding:12px;
+      border:none;
+      border-radius:8px;
+      background:#ee4d2d;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+    }
+    .card{
+      margin-top:15px;
+      padding:15px;
+      border-radius:10px;
+      background:#fff7f5;
+      border-left:5px solid #ee4d2d;
+    }
+    .status-done{color:green;font-weight:bold;}
+    .status-pending{color:orange;font-weight:bold;}
+    .status-cancel{color:red;font-weight:bold;}
+    .total{
+      margin-top:15px;
+      padding:15px;
+      background:#fff3cd;
+      border-radius:10px;
+      font-size:18px;
+      font-weight:bold;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>🧡 Tra cứu hoàn tiền</h1>
+
+    <input type="text" id="q" placeholder="Nhập ID đơn hoặc tên zalo viết liền không dấu">
+
+    <button onclick="search()">🔍 Tra cứu</button>
+
+    <div id="result"></div>
+  </div>
+
+<script>
+function money(x){
+  return Number(x).toLocaleString('vi-VN') + 'đ';
+}
+
+function statusClass(s){
+  s = String(s).toLowerCase();
+  if(s.includes('hoàn') || s.includes('complete')) return 'status-done';
+  if(s.includes('hủy') || s.includes('cancel')) return 'status-cancel';
+  return 'status-pending';
+}
+
+function search(){
+
+  const q = document.getElementById('q').value.trim();
+
+  if(!q) return;
+
+  document.getElementById('result').innerHTML = '⏳ Đang tra cứu...';
+
+  const API = "https://script.google.com/macros/s/AKfycbx8xZUqDSiMwzvytOFy1no1WjJy6nqBr9aQ4dBN7-zMLsEMTmuAOXvc3pQWR7fZWKB_1g/exec";
+
+  fetch(API + "?q=" + encodeURIComponent(q))
+      .then(r => r.json())
+      .then(show)
+      .catch(err => {
+
+          document.getElementById("result").innerHTML =
+              "Lỗi: " + err;
+
+      });
+}
+
+function show(res){
+
+  const div = document.getElementById('result');
+
+  if(res.type == 'none'){
+    div.innerHTML = '<p>❌ Không tìm thấy dữ liệu.</p>';
+    return;
+  }
+
+  // ===== ID đơn =====
+  if(res.type == 'order'){
+
+    div.innerHTML = `
+      <div class="card">
+        <h3>📦 ${res.product}</h3>
+        <p><b>ID đơn:</b> ${res.orderId}</p>
+        <p><b>Trạng thái:</b> <span class="${statusClass(res.status)}">${res.status}</span></p>
+        <p><b>Hoa hồng:</b> ${money(res.commission)}</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  // ===== sub_id3 =====
+  let html = `<h3>👤 ${res.sub}</h3>`;
+
+  res.items.forEach((it,i)=>{
+
+    html += `
+      <div class="card">
+        <h4>${i+1}. ${it.product}</h4>
+        <p><b>Trạng thái:</b> <span class="${statusClass(it.status)}">${it.status}</span></p>
+        <p><b>Hoa hồng:</b> ${money(it.commission)}</p>
+      </div>
+    `;
+  });
+
+  html += `
+    <div class="total">
+      💰 Tổng hoa hồng: ${money(res.total)}<br>
+      📦 Tổng đơn: ${res.count}
+    </div>
+  `;
+
+  div.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
