@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chuyển đổi Link Shopee Affiliate</title>
+<meta name="description" content="Công cụ chuyển đổi link Shopee sang link tiếp thị liên kết (affiliate) với thông tin sản phẩm và hoa hồng chi tiết.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange-500: #ee4d2d;
+  --orange-600: #d73211;
+  --orange-gradient: linear-gradient(135deg, #ff6633 0%, #ee4d2d 50%, #d73211 100%);
+  --green-50: #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --red-50: #fef2f2;
+  --red-500: #ef4444;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--gray-50);
+  min-height: 100vh;
+  color: var(--gray-800);
+  line-height: 1.6;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: var(--orange-gradient);
+  padding: 28px 20px 22px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.12) 0%, transparent 50%);
+  pointer-events: none;
+}
+.header h1 {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  position: relative;
+}
+.header p {
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  margin-top: 4px;
+  position: relative;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--green-200);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  transition: var(--transition);
+}
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.btn-clear {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid var(--gray-200);
+  color: var(--gray-500);
+  font-size: 13px;
+  font-family: inherit;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-clear:hover {
+  background: var(--red-50);
+  border-color: var(--red-500);
+  color: var(--red-500);
+}
+
+/* ===== FORM ELEMENTS ===== */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 6px;
+}
+.form-hint {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-top: 4px;
+  font-style: italic;
+}
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--gray-50);
+  color: var(--gray-800);
+  transition: var(--transition);
+  outline: none;
+}
+.form-input:focus {
+  border-color: var(--orange-500);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.1);
+}
+textarea.form-input {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.5;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 15px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: var(--orange-gradient);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(238, 77, 45, 0.35);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===== LOADING SPINNER ===== */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== RESULT SECTION ===== */
+.result-section {
+  display: none;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.result-section.visible {
+  display: block;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.result-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.result-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== BADGE ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.badge-success {
+  background: var(--green-100);
+  color: var(--green-700);
+}
+.badge-loading {
+  background: #fef3c7;
+  color: #92400e;
+}
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ===== COPY ALL BUTTON ===== */
+.btn-copy-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1.5px solid var(--gray-200);
+  color: var(--gray-600);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-copy-all:hover {
+  border-color: var(--blue-500);
+  color: var(--blue-500);
+  background: #eff6ff;
+}
+.btn-copy-all svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== PRODUCT CARD ===== */
+.product-card {
+  background: #fff;
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: var(--transition);
+  animation: fadeIn 0.3s ease;
+}
+.product-card:hover {
+  border-color: var(--green-200);
+  box-shadow: var(--shadow-sm);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.product-image {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+}
+.product-image-placeholder {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  font-size: 28px;
+}
+.product-details {
+  flex: 1;
+  min-width: 0;
+}
+.product-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-800);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-link {
+  font-size: 12.5px;
+  color: var(--blue-500);
+  word-break: break-all;
+  display: block;
+  margin-bottom: 4px;
+  text-decoration: none;
+}
+.product-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.product-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  white-space: nowrap;
+}
+.btn-copy {
+  background: var(--orange-500);
+  color: #fff;
+}
+.btn-copy:hover {
+  background: var(--orange-600);
+  box-shadow: 0 2px 8px rgba(238, 77, 45, 0.3);
+}
+.btn-buy {
+  background: #fff;
+  color: var(--blue-600);
+  border: 1.5px solid var(--blue-500);
+}
+.btn-buy:hover {
+  background: #eff6ff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+.btn-buy svg, .btn-copy svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== COMMISSION BAR ===== */
+.commission-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-radius: var(--radius-sm);
+  border: 1px solid #fde68a;
+}
+.commission-bar .star {
+  font-size: 16px;
+}
+.commission-bar .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #92400e;
+}
+.commission-bar .value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--orange-500);
+}
+.commission-bar .rate {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green-600);
+  margin-left: 2px;
+}
+.xtra-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--orange-500);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== NO PRODUCT INFO FALLBACK ===== */
+.fallback-link {
+  padding: 14px;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+  word-break: break-all;
+  font-size: 13px;
+  color: var(--blue-500);
+  margin-bottom: 12px;
+}
+
+/* ===== SKELETON LOADING ===== */
+.skeleton {
+  animation: shimmer 1.5s infinite;
+  background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-50) 50%, var(--gray-100) 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-card {
+  padding: 16px;
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+.skeleton-row {
+  display: flex;
+  gap: 14px;
+}
+.skeleton-image {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+}
+.skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.skeleton-line {
+  height: 14px;
+}
+.skeleton-line.w70 { width: 70%; }
+.skeleton-line.w90 { width: 90%; }
+.skeleton-line.w50 { width: 50%; }
+.skeleton-commission {
+  height: 40px;
+  margin-top: 12px;
+}
+
+/* ===== TOAST NOTIFICATION ===== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--gray-800);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-xl);
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ===== ERROR STATE ===== */
+.error-msg {
+  padding: 12px 16px;
+  background: var(--red-50);
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  color: #991b1b;
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.error-msg.visible {
+  display: block;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .main { padding: 12px 10px 32px; }
+  .card { padding: 18px 16px; }
+  .product-info { flex-wrap: wrap; }
+  .product-image, .product-image-placeholder { width: 56px; height: 56px; min-width: 56px; }
+  .product-actions { width: 100%; margin-top: 8px; }
+  .btn-action { flex: 1; justify-content: center; }
+  .result-header { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🛒 Tra cứu hoàn tiền Shopee</h1>
+  <p>Tra cứu hoàn tiền và gắn mã hoàn tiền</p>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Nhập đường dẫn sản phẩm cần tra cứu</span>
+      <button class="btn-clear" onclick="clearAll()" title="Xoá tất cả">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Xoá
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="subId">Tên tra cứu (ví dụ jennykieudiem)</label>
+      <input class="form-input" type="text" id="subId" placeholder="Dùng để tra cứu tiền hoàn sau này.">
+      <p class="form-hint">Dùng để tra cứu tiền hoàn sau này.</p>
+    </div>
+
+    <div class="form-group">
+      <textarea class="form-input" id="urlInput" placeholder="Dán link Shopee vào đây...&#10;Hỗ trợ: shopee.vn/product/..., shopee.vn/...-i.xxx.xxx, s.shopee.vn/..., shp.ee/..."></textarea>
+    </div>
+
+    <button class="btn-primary" id="btnConvert" onclick="convertFull()">
+      Tra cứu tiền hoàn
+    </button>
+  </div>
+
+  <!-- ERROR MESSAGE -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- LOADING SKELETON -->
+  <div class="card result-section" id="loadingSection">
+    <div class="result-header">
+      <div class="result-title-group">
+        <span class="result-title">Kết quả tra cứu</span>
+        <span class="badge badge-loading"><span class="badge-dot"></span> Đang xử lý...</span>
+      </div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skeleton-row">
+        <div class="skeleton skeleton-image"></div>
+        <div class="skeleton-lines">
+          <div class="skeleton skeleton-line w90"></div>
+          <div class="skeleton skeleton-line w70"></div>
+          <div class="skeleton skeleton-line w50"></div>
+        </div>
+      </div>
+      <div class="skeleton skeleton-commission"></div>
+    </div>
+  </div>
+
+  <!-- RESULT CARD -->
+  <div class="card result-section" id="resultSection">
+    <div class="result-header">
+      <div class="result-title-group">
+        <span class="result-title">Kết quả tra cứu</span>
+        <span class="badge badge-success">✓ Đã sẵn sàng</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px; color:var(--gray-500); margin-bottom:14px;">Các link đã chuyển đổi:</p>
+
+    <div id="resultList"></div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Shopee Affiliate Link Converter &copy; 2026
+</div>
+
+<script>
+// ===== CẤU HÌNH =====
+// Thay bằng URL Web App của bạn sau khi deploy ma.gs
+const API_URL = "https://script.google.com/macros/s/AKfycbzmUGUe78QNzBviD4f8g1yIVaJJo6Z9ukZ29enKaYKkxBwB0uHmey42_P6VUyIPJVM0/exec";
+
+// ===== STATE =====
+let lastResults = [];
+
+// ===== MAIN CONVERT FUNCTION =====
+async function convertFull() {
+  const urlInput = document.getElementById('urlInput').value.trim();
+  const subId = document.getElementById('subId').value.trim();
+  const btn = document.getElementById('btnConvert');
+
+  // Validation
+  if (!urlInput) {
+    showError('Vui lòng dán link Shopee vào ô bên trên.');
+    return;
+  }
+
+  // Reset
+  hideError();
+  hideResult();
+  showLoading();
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Đang xử lý...';
+  lastResults = [];
+
+  try {
+    // Xây dựng URL API
+    let apiEndpoint = API_URL + '?action=convert_full&url=' + encodeURIComponent(urlInput);
+    if (subId) {
+      apiEndpoint += '&sub_id=' + encodeURIComponent(subId);
+    }
+
+    const res = await fetch(apiEndpoint);
+    const json = await res.json();
+
+    hideLoading();
+
+    if (!json.success) {
+      showError(json.message || 'Không thể chuyển đổi link. Vui lòng kiểm tra lại.');
+      return;
+    }
+
+    // Lưu kết quả
+    lastResults.push(json);
+
+    // Render
+    renderResults();
+
+  } catch (err) {
+    hideLoading();
+    showError('Lỗi kết nối. Vui lòng thử lại sau. (' + err.message + ')');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Lấy link hoàn tiền';
+  }
+}
+
+// ===== RENDER RESULTS =====
+function renderResults() {
+  const container = document.getElementById('resultList');
+  container.innerHTML = '';
+
+  lastResults.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
+    if (data.product) {
+      const p = data.product;
+      const formattedCommission = p.commission ? Number(p.commission).toLocaleString('vi-VN') + 'đ' : '0đ';
+      const rateDisplay = Number(p.totalRatePercent || 0).toFixed(2) + '%';
+
+      card.innerHTML = `
+        <div class="product-info">
+          ${p.image
+            ? `<img class="product-image" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+               <div class="product-image-placeholder" style="display:none;">🛍️</div>`
+            : `<div class="product-image-placeholder">🛍️</div>`
+          }
+          <div class="product-details">
+            <div class="product-name">${escapeHtml(p.name || 'Sản phẩm Shopee')}</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn-action btn-copy" onclick="copyLink('${escapeAttr(data.affiliate)}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy link
+            </button>
+            <a class="btn-action btn-buy" href="${escapeHtml(data.affiliate)}" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Mua ngay
+            </a>
+          </div>
+        </div>
+        <div class="commission-bar">
+          <span class="star">⭐</span>
+          <span class="label">Hoàn tiền ước tính:</span>
+          <span class="value">${formattedCommission}</span>
+          ${p.isXtra ? '<span class="xtra-badge">XTRA</span>' : ''}
+        </div>
+      `;
+    } else {
+      // Không có thông tin sản phẩm — chỉ hiện link
+      card.innerHTML = `
+        <div class="fallback-link">
+          <a href="${escapeHtml(data.affiliate)}" target="_blank" rel="noopener" style="color:var(--blue-500);text-decoration:none;">${escapeHtml(data.affiliate)}</a>
+        </div>
+        <div class="product-actions" style="margin-top:12px;">
+          <button class="btn-action btn-copy" onclick="copyLink('${escapeAttr(data.affiliate)}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy link
+          </button>
+          <a class="btn-action btn-buy" href="${escapeHtml(data.affiliate)}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Mua ngay
+          </a>
+        </div>
+        ${data.message ? `<p style="font-size:12px; color:var(--gray-400); margin-top:10px; font-style:italic;">⚠️ ${escapeHtml(data.message)}</p>` : ''}
+      `;
+    }
+
+    container.appendChild(card);
+  });
+
+  showResult();
+}
+
+// ===== UTILITY FUNCTIONS =====
+function copyLink(link) {
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('✅ Đã copy link!');
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = link;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ Đã copy link!');
+  });
+}
+
+function copyAll() {
+  if (lastResults.length === 0) return;
+  const allLinks = lastResults.map(r => r.affiliate).join('\n');
+  navigator.clipboard.writeText(allLinks).then(() => {
+    showToast('✅ Đã copy toàn bộ link!');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = allLinks;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ Đã copy toàn bộ link!');
+  });
+}
+
+function clearAll() {
+  document.getElementById('urlInput').value = '';
+  document.getElementById('subId').value = '';
+  hideResult();
+  hideError();
+  hideLoading();
+  lastResults = [];
+  document.getElementById('urlInput').focus();
+}
+
+function showLoading() {
+  document.getElementById('loadingSection').classList.add('visible');
+}
+function hideLoading() {
+  document.getElementById('loadingSection').classList.remove('visible');
+}
+function showResult() {
+  document.getElementById('resultSection').classList.add('visible');
+}
+function hideResult() {
+  document.getElementById('resultSection').classList.remove('visible');
+}
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = '⚠️ ' + msg;
+  el.classList.add('visible');
+}
+function hideError() {
+  document.getElementById('errorMsg').classList.remove('visible');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  if (!str) return '';
+  return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+}
+
+// Enter key support
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('urlInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      convertFull();
+    }
+  });
+});
+</script>
+
+</body>
+</html>
